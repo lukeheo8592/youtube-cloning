@@ -42,4 +42,4 @@ export const postEdit = (req, res) => {
     const {title} = req.body;
     videos[id -1].title = title;
     return res.redirect(`/videos/${id}`);
-}
+} 
