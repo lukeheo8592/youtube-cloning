@@ -44,22 +44,18 @@ export const postLogin = async (req, res) => {
   const pageTitle = "Login";
   const user = await User.findOne({ username, socialOnly: false });
   if (!user) {
-    return res
-      .status(400)
-      .render("login", {
-       pageTitle,
-        errorMessage: " An account with this username doesn't exist",
-      });
+    return res.status(400).render("login", {
+      pageTitle,
+      errorMessage: " An account with this username doesn't exist",
+    });
   }
 
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
-    return res
-      .status(400)
-      .render("login", {
-       pageTitle,
-        errorMessage: "Wrong Password",
-      });
+    return res.status(400).render("login", {
+      pageTitle,
+      errorMessage: "Wrong Password",
+    });
   }
   req.session.loggedIn = true;
   req.session.user = user;
@@ -67,7 +63,7 @@ export const postLogin = async (req, res) => {
   return res.redirect("/");
 };
 
-export const startGithubLogin = (req, res) =>{
+export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
     client_id: process.env.GH_CLIENT,
@@ -79,7 +75,7 @@ export const startGithubLogin = (req, res) =>{
 
   const finalUrl = `${baseUrl}?${params}`;
   return res.redirect(finalUrl);
-}
+};
 
 export const finishGithubLogin = async (req, res) => {
   const baseUrl = "https://github.com/login/oauth/access_token";
@@ -127,23 +123,24 @@ export const finishGithubLogin = async (req, res) => {
     if (!user) {
       user = await User.create({
         avatarUrl: userData.avatar_url,
-        name : userData.name? userData.name : "Unknown",
+        name: userData.name ? userData.name : "Unknown",
         username: userData.login,
         email: emailObj.email,
         password: "",
         socialOnly: true,
         location: userData.location,
       });
-      
     }
     req.session.loggedIn = true;
-      req.session.user = user;
-      return res.redirect("/");
+    req.session.user = user;
+    return res.redirect("/");
   } else {
     return res.redirect("/login");
-  }};
-
+  }
+};
+export const logout = (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
+};
 export const edit = (req, res) => res.send("Edit");
-export const remove = (req, res) => res.send("Remove");
-export const logout = (req, res) => res.send("logout");
 export const see = (req, res) => res.send("See");
