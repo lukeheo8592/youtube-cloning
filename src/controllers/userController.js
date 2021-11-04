@@ -152,6 +152,16 @@ export const postEdit = async (req, res) => {
     },
     body: { name, email, username, location },
   } = req;
+  const pageTitle = "Edit Profile";
+  const exixts = await User.exists({
+    $and: [{ _id: { $ne: _id } }, { $or: [{ username }, { email }] }],
+  });
+  if (exixts) {
+    return res.status(400).render("edit-profile", {
+      pageTitle,
+      errorMessage: "this username/email is already taken.",
+    });
+  }
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
@@ -164,5 +174,15 @@ export const postEdit = async (req, res) => {
   );
   req.session.user = updatedUser;
   return res.redirect("/users/edit");
+};
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = (req, res) => {
+  // send notification
+  return res.redirect("/");
 };
 export const see = (req, res) => res.send("See");
