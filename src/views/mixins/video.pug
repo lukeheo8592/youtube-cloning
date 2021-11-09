@@ -6,6 +6,6 @@ mixin video(video)
             div.video-mixin__meta
                 span #{video.owner.name} •
                 if (video.meta.views > 0)     
-                    span  views
+                    span  #{video.meta.views} views
                 else 
-                    span  view   
+                    span  #{video.meta.views} view   
