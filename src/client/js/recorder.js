@@ -6,12 +6,12 @@ let recorder;
 let videoFile;
 
 const handleDownload = () => {
-    const a = document.createElement("a");
-    a.href = videoFile;
-    a.download = "MyRecording.webm";
-    document.body.appendChild(a);
-    a.click();
-  };
+  const a = document.createElement("a");
+  a.href = videoFile;
+  a.download = "MyRecording.webm";
+  document.body.appendChild(a);
+  a.click();
+};
 
 const handleStop = () => {
   startBtn.innerText = "Download Recording";
@@ -37,7 +37,7 @@ const handleStart = () => {
 
 const init = async () => {
   stream = await navigator.mediaDevices.getUserMedia({
-    audio: true,
+    audio: false,
     video: true,
   });
   video.srcObject = stream;

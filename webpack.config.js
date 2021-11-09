@@ -1,5 +1,5 @@
-const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("path");
 
 module.exports = {
   entry: {
@@ -8,7 +8,7 @@ module.exports = {
     recorder: "./src/client/js/recorder.js",
   },
   mode: "development",
-  watch:true,
+  watch: true,
   plugins: [
     new MiniCssExtractPlugin({
       filename: "css/styles.css",
@@ -30,7 +30,8 @@ module.exports = {
           },
         },
       },
-      { test: /\.scss$/, 
+      {
+        test: /\.scss$/,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
     ],
