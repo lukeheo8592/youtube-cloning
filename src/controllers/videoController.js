@@ -1,12 +1,5 @@
 import Video from "../models/Video";
 import User from "../models/User";
-/*
-console.log("start")
-Video.find({}, (error, videos) => {
-  return res.render("home", { pageTitle: "Home", videos });
-});
-console.log("finished")
-*/
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -23,6 +16,7 @@ export const watch = async (req, res) => {
   }
   return res.render("watch", { pageTitle: video.title, video });
 };
+
 export const getEdit = async (req, res) => {
   const { id } = req.params;
   const {
@@ -56,7 +50,6 @@ export const postEdit = async (req, res) => {
     description,
     hashtags: Video.formatHashtags(hashtags),
   });
-
   return res.redirect(`/videos/${id}`);
 };
 
@@ -65,17 +58,18 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
-  // here we will add a video to the videos array.
   const {
     user: { _id },
   } = req.session;
-  const { path: fileUrl } = req.file;
+  const { video, thumb } = req.files;
+  console.log(video, thumb);
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path.replace(/[\\]/g, "/"),
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
@@ -92,8 +86,7 @@ export const postUpload = async (req, res) => {
   }
 };
 
-
-export const deleteVideo = async(req, res) =>{
+export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   const {
     user: { _id },
@@ -106,21 +99,19 @@ export const deleteVideo = async(req, res) =>{
     return res.status(403).redirect("/");
   }
   await Video.findByIdAndDelete(id);
-
   return res.redirect("/");
-}
+};
 
 export const search = async (req, res) => {
   const { keyword } = req.query;
   let videos = [];
   if (keyword) {
-     videos = await Video.find({
+    videos = await Video.find({
       title: {
-        $regex: new RegExp(keyword, "i")
+        $regex: new RegExp(`${keyword}$`, "i"),
       },
     }).populate("owner");
   }
-
   return res.render("search", { pageTitle: "Search", videos });
 };
 
