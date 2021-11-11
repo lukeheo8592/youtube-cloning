@@ -1,11 +1,12 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
-import {localsmiddleware} from "./middlewares";
+import { localsmiddleware } from "./middlewares";
 import apiRouter from "./routers/apiRouter";
 
 const app = express();
@@ -17,15 +18,16 @@ app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
-    session({
-      secret: process.env.COOKIE_SECRET,
-      resave: false,
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
     saveUninitialized: false,
-      store: MongoStore.create({mongoUrl:process.env.DB_URL }),
-    })
-  );
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
+  })
+);
 
-app.use(localsmiddleware);  
+app.use(flash());
+app.use(localsmiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
