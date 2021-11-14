@@ -101,11 +101,12 @@ const handleMouseLeave = () => {
 };
 
 const handleKeyDown = (event) => {
-  if (event.key === " ") {
+  if(event.target.nodeName.toLowerCase() != "textarea"){
+    if (event.key === " ") {
       handlePlayClick();
   }
   if (event.key == "m") {
-      handleMute();
+    handleMuteClick();
   }
   if (event.keyCode === 37) {
       //Left
@@ -113,6 +114,7 @@ const handleKeyDown = (event) => {
   } else if (event.keyCode === 39) {
       //Right
       video.currentTime += 5;
+  }
   }
 
 
