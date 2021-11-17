@@ -70,7 +70,7 @@ typings/
 .yarn-integrity
 /uploads
 .DS_Store 
-
+/build
 # dotenv environment variables file
 .env
 .env.test
