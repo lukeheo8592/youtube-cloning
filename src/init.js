@@ -1,7 +1,7 @@
 import "regenerator-runtime";
 import "dotenv/config";
 import "./db";
-import "./models/Video"
+import "./models/video"
 import "./models/User"
 import "./models/Comment";
 import app from "./server"
